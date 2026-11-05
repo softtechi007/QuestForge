@@ -17,4 +17,10 @@ QuestForge is an educational project where each "level" introduces a new OOP con
 - Implemented methods: `describe()`, `attack()`, `heal()`
 - Demonstrated object instantiation and state management
 
-## Project Structure
+### Level 2: Encapsulation ✅
+- Protected `Character` internal state using `_health` and `__max_health` fields
+- Added `@property` decorator for read-only `health` access
+- Implemented `take_damage()` with validation (rejects negative damage, clamps HP to 0)
+- Updated `heal()` to cap at max HP and reject negative amounts
+- Added `is_alive` property to check character status
+- Prevented invalid states: no negative HP, no overhealing, no direct field tampering
