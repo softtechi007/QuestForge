@@ -34,3 +34,14 @@ QuestForge is an educational project where each "level" introduces a new OOP con
 - All subclasses inherit Character's encapsulated state via `super().__init__()`
 - Demonstrated "is-a" relationship: all subclasses are Characters
 - Kept inheritance shallow (one level) to avoid fragile base class problem
+
+### Level 4: Polymorphism & Abstraction ✅
+- Introduced an abstract base class (or interface) to enforce a unified contract for all characters
+- Implemented the `take_turn(target)` method across all subclasses (Warrior, Mage, Rogue, Cleric)
+- **Warrior**: `take_turn()` executes a physical strike
+- **Mage**: `take_turn()` checks mana and casts a spell
+- **Rogue**: `take_turn()` calculates critical hit chances
+- **Cleric**: `take_turn()` evaluates ally health and heals if necessary
+- Updated the Battle Engine to iterate through a generic list of `Character` objects, calling `take_turn()` without needing `if/else` type-checking
+- Demonstrated the **Liskov Substitution Principle** (any subclass can seamlessly replace the base class without breaking the engine)
+- Eliminated tight coupling between the Battle Engine and specific character classes, making the combat loop open for extension but closed for modification
