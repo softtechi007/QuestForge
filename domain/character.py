@@ -1,4 +1,6 @@
-class Character:
+from abc import ABC, abstractmethod
+
+class Character(ABC):
     """Placeholder — fleshed out in Level 1."""
     def __init__(self, name: str, health: int, attack_power: int):
         self.name = name
@@ -40,5 +42,10 @@ class Character:
             return
         target.take_damage(self.attack_power)
         print(f"{self.name} attacks {target.name} for {self.attack_power} damage!")
+    
+    @abstractmethod
+    def special_ability(self, target: 'Character')-> None:
+        """Every concrete Character MUST define its own special move."""
+        raise NotImplementedError
         
     
