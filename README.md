@@ -71,3 +71,10 @@ QuestForge is an educational project where each "level" introduces a new OOP con
 - `Inventory` is decoupled from specific item types via polymorphism—can hold any `Item` implementation
 - Showed how composition enables flexible, reusable object relationships
 - Prepared foundation for Level 7 (Custom Exceptions) and future levels (Decorators for buffs, Serialization for save/load)
+
+### Level 7: Custom Exceptions & Error Handling ✅
+- Created `domain/exceptions.py` with a base `QuestForgeError` class and specific domain subtypes (`DeadCharacterError`, `InsufficientManaError`, `InvalidActionError`, `InventoryEmptyError`)
+- Replaced generic errors and silent failures in `character.py` and `classes.py` with domain-specific exceptions
+- Implemented Exception Translation in `inventory.py`: catching Python's generic `IndexError` and raising the domain-specific `InventoryEmptyError`
+- Established a strict error-handling contract so the UI/CLI (Level 17) can catch specific game rules and display friendly messages without crashing the engine
+- Demonstrated how custom exceptions turn errors into part of the project's domain vocabulary, allowing calling code to react precisely to different failure states

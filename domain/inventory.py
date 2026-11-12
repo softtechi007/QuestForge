@@ -1,3 +1,7 @@
+from operator import index
+
+from domain.exceptions import InventoryEmptyError
+
 class Inventory:
     def __init__(self):
         self._items: list = []
@@ -8,8 +12,13 @@ class Inventory:
 
 
     def use(self, index: int, target) -> str:
-        item = self._items.pop(index)
-        return item.apply(target)
+        try:
+            # Try to remove and get the item in one step
+            item = self._items.pop(index) 
+            return item.apply(target)        
+        except IndexError:
+            # This is indented ONE level inside the except
+            raise InventoryEmptyError(f"Cannot use item at index {index}. Inventory is empty or invalid.")
 
 
     def list_items(self) -> list[str]:

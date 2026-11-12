@@ -1,4 +1,5 @@
 from domain.character import Character
+from domain.exceptions import InsufficientManaError
 
 class Warrior(Character):
     """A Warrior character with enhanced attack power."""
@@ -15,14 +16,13 @@ class Mage(Character):
     """A Mage character with enhanced attack power."""
     def __init__(self, name: str):
         super().__init__(name, health=80, attack_power=10)
-        self.mana = 100  # Mages have mana for special abilities
+        self.mana = 50  # Mages have mana for special abilities
         
     def special_ability(self, target: Character) -> None:
         """Mage's special ability: Fireball."""
         cost = 20  # Mana cost for Fireball
         if self.mana < cost:  # Check if the mage has enough mana
-            print(f"{self.name} doesn't have enough mana to cast Fireball.")
-            return
+             raise InsufficientManaError(f"{self.name} needs {cost} mana, has {self.mana}")
         self.mana -= cost  # Deduct mana cost
         damage = self.attack_power * 3  # Fireball deals triple attack power
         target.take_damage(damage)
