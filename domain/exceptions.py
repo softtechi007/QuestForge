@@ -1,0 +1,19 @@
+class QuestForgeError(Exception):
+    """Base class for all domain-specific errors in QuestForge."""
+    pass
+
+
+class DeadCharacterError(QuestForgeError):
+    pass
+
+
+class InsufficientManaError(QuestForgeError):
+    pass
+
+
+class InvalidActionError(QuestForgeError):
+    pass
+
+
+class InventoryEmptyError(QuestForgeError):
+    pass

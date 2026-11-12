@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from domain.inventory import Inventory
+from domain.exceptions import DeadCharacterError
 
 class Character(ABC):
     """Placeholder — fleshed out in Level 1."""
@@ -50,8 +51,7 @@ class Character(ABC):
     
     def attack(self, target: 'Character')-> None:
         if not self.is_alive:
-            print(f"{self.name} is dead and cannot attack.")
-            return
+            raise DeadCharacterError(f"{self.name} is dead and cannot act")
         if not target.is_alive:
             print(f"{target.name} is already dead.")
             return
