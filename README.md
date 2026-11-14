@@ -78,3 +78,16 @@ QuestForge is an educational project where each "level" introduces a new OOP con
 - Implemented Exception Translation in `inventory.py`: catching Python's generic `IndexError` and raising the domain-specific `InventoryEmptyError`
 - Established a strict error-handling contract so the UI/CLI (Level 17) can catch specific game rules and display friendly messages without crashing the engine
 - Demonstrated how custom exceptions turn errors into part of the project's domain vocabulary, allowing calling code to react precisely to different failure states
+
+### Level 8: SOLID Principles Refactor ✅
+- Audited Levels 1–7 against the five SOLID principles; this was a pure refactor level with no new features, focused on hardening the foundation before adding design patterns in Levels 9–14
+- **Single Responsibility Principle (SRP):** Removed all `print()` calls from `domain/character.py` and `domain/classes.py`; combat methods (`attack`, `take_damage`, `heal`, `add_defense`, `special_ability`) now return descriptive strings instead of writing to the console
+- Separated game logic from presentation: `Character` now only manages state and math; `play.py` (the UI layer) is responsible for displaying returned strings — enabling future swap from CLI to Web UI without touching domain code
+- **Interface Segregation Principle (ISP):** Split the monolithic `Item` interface from Level 5 into two focused abstractions in `domain/item.py`: `Usable` (with `apply()`) for consumables and `Equippable` (with `equip()`) for gear
+- Updated `domain/items.py`: `HealthPotion` now implements only `Usable`; `Weapon` now implements only `Equippable` — no class is forced to stub out methods it doesn't use
+- **Open/Closed Principle (OCP):** Verified that the polymorphic `take_turn()` loop from Level 4 already satisfies OCP — new character types (e.g., Necromancer) can be added as new subclasses without editing the battle engine
+- **Liskov Substitution Principle (LSP):** Confirmed all subclasses honor the parent contract — `special_ability()` now consistently returns `str` across Warrior, Mage, Rogue, and Cleric, with no inconsistent return types or silent `None` returns
+- **Dependency Inversion Principle (DIP):** Documented the architectural intent that high-level modules (Battle Engine, UI) depend on abstractions (`Character` ABC, `Usable`/`Equippable` interfaces) rather than concrete classes — foundation for future save/load adapters and mock-based testing
+- Authored `REFACTOR_NOTES.md` capturing before/after snippets for each SOLID letter, forming the basis of the final architecture write-up
+- Established that most design patterns in Levels 9–14 are simply named recipes for satisfying SOLID; a SOLID-clean base makes pattern insertion trivial rather than invasive
+- Previewed the Observer pattern (Level 14): returning strings from combat methods is the first step toward a decoupled event system where multiple listeners (CLI, Web UI, log file) can subscribe to combat events
