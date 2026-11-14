@@ -27,7 +27,7 @@ class Character(ABC):
     def describe(self)-> str:
         return f"{self.name} has {self.health} HP and {self.attack_power} ATK."
     
-    def take_damage(self, amount: int)-> None:
+    def take_damage(self, amount: int)-> str:
         if amount < 0:
             raise ValueError("Damage amount cannot be negative.")
         
@@ -35,38 +35,36 @@ class Character(ABC):
         if self._defense > 0:
             # Block the attack completely!
             self._defense -= 1
-            print(f"{self.name}'s shield blocks the attack! ({self._defense} charges left)")
-            return  # Exit early, no damage taken
+            return f"{self.name}'s shield blocks the attack! ({self._defense} charges left)" # Exit early, no damage taken
         
         self._health = max(0, self._health - amount)
-        
-    def heal(self, amount: int)-> None:
+        return f"{self.name} takes {amount} damage! (HP: {self._health})"
+
+    def heal(self, amount: int)-> str:
             if amount < 0:
                 raise ValueError("Healing amount cannot be negative.")
             if not self.is_alive:
-                print(f"{self.name} is dead and cannot be healed.")
-                return
+                return f"{self.name} is dead and cannot be healed."
             self._health = min(self._health + amount, self.__max_health)
-            print(f"{self.name} heals for {amount} HP!")
+            return f"{self.name} heals for {amount} HP! (HP: {self._health})"
     
-    def attack(self, target: 'Character')-> None:
+    def attack(self, target: 'Character')-> str:
         if not self.is_alive:
             raise DeadCharacterError(f"{self.name} is dead and cannot act")
         if not target.is_alive:
-            print(f"{target.name} is already dead.")
-            return
+            return f"{target.name} is already dead."
         target.take_damage(self.attack_power)
-        print(f"{self.name} attacks {target.name} for {self.attack_power} damage!")
+        return f"{self.name} attacks {target.name} for {self.attack_power} damage!"
     
-    def add_defense(self, amount: int) -> None:
+    def add_defense(self, amount: int) -> str:
         """Add shield charges (called by Armor items)"""
         if amount < 0:
             raise ValueError("Defense amount cannot be negative.")
         self._defense += amount
-        print(f"{self.name} gains {amount} shield charges! (Total: {self._defense})")
+        return f"{self.name} gains {amount} shield charges! (Total: {self._defense})"
     
     @abstractmethod
-    def special_ability(self, target: 'Character')-> None:
+    def special_ability(self, target: 'Character')-> str:
         """Every concrete Character MUST define its own special move."""
         raise NotImplementedError
         

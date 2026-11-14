@@ -1,5 +1,5 @@
 from domain.character import Character
-from domain.classes import Warrior, Mage, Rouge, Cleric
+from domain.classes import Warrior, Mage, Rogue, Cleric
 from domain.battle import run_special_round,total_party_damage
 from domain.items import Armor, HealthPotion, Weapon
 from domain.exceptions import QuestForgeError
@@ -19,27 +19,38 @@ if __name__ == "__main__":
     warrior = Warrior("Bram")
 
 
+    print("--- Testing Mage Special Ability (Mana) ---")
     try:
-        # Sylla starts with 50 mana. 3 fireballs (20 cost each) will fail.
-        mage.special_ability(warrior)
-        mage.special_ability(warrior)
-        mage.special_ability(warrior) 
+        # 1. Capture the returned string in a variable
+        result1 = mage.special_ability(warrior)
+        print(result1) # 2. The UI prints it
+        
+        result2 = mage.special_ability(warrior)
+        print(result2)
+        
+        result3 = mage.special_ability(warrior) 
+        print(result3)
+        
     except QuestForgeError as e:
         print(f"Action failed: {e}")
     
-# 1. Setup: Create a character with an empty inventory
+    print("\n--- Testing Empty Inventory ---")
     hero = Warrior("Arthur")
-
-    # 2. The Bouncer: Try to use an item that doesn't exist
     try:
-        print("Attempting to use item at index 0...")
         hero.inventory.use(0, hero)
-        
     except QuestForgeError as e:
-        # 3. The Polite Rejection: Catch the domain error and print friendly text
         print(f"Game UI: {e}") 
 
-    print("Game continues smoothly...")
+    print("\n--- Testing Basic Attack & Shield ---")
+    # Let's give Arthur some defense to test the shield string
+    print(hero.add_defense(2)) 
+    
+    # Now attack him
+    print(mage.attack(hero)) 
+    print(mage.attack(hero)) # This one should trigger the shield block string!
+    print(hero.health)
+    print(mage.attack(hero)) 
+    print(hero.health)  # This should show the remaining health after the shield is gone
 
     
     
