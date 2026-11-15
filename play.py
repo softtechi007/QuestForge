@@ -3,7 +3,7 @@ from domain.classes import Warrior, Mage, Rogue, Cleric
 from domain.battle import run_special_round,total_party_damage
 from domain.items import Armor, HealthPotion, Weapon
 from domain.exceptions import QuestForgeError
-
+from patterns.creational import CharacterFactory, EnemyBuilder
 
 if __name__ == "__main__":
     
@@ -15,42 +15,21 @@ if __name__ == "__main__":
     # rogue = Character(name="Shadow", health=90, attack_power=12)
     
 
-    mage = Mage("Sylla")
-    warrior = Warrior("Bram")
+    # Using Factory
+    player = CharacterFactory.create("mage", "Sylla")
+    player2 = CharacterFactory.create("cleric", "Liora")
 
 
-    print("--- Testing Mage Special Ability (Mana) ---")
-    try:
-        # 1. Capture the returned string in a variable
-        result1 = mage.special_ability(warrior)
-        print(result1) # 2. The UI prints it
+    # Using Builder
+    boss = (EnemyBuilder("Dragon")
+            .with_health(500)
+            .with_attack(50)
+            .with_loot(HealthPotion())
+            .build())
+
+
+    print(f"Created {player.name} (HP: {player.health})")
+    print(f"Created {player2.name} (HP: {player2.health})")
+    print(f"Created {boss.name} (HP: {boss.health})")
         
-        result2 = mage.special_ability(warrior)
-        print(result2)
-        
-        result3 = mage.special_ability(warrior) 
-        print(result3)
-        
-    except QuestForgeError as e:
-        print(f"Action failed: {e}")
-    
-    print("\n--- Testing Empty Inventory ---")
-    hero = Warrior("Arthur")
-    try:
-        hero.inventory.use(0, hero)
-    except QuestForgeError as e:
-        print(f"Game UI: {e}") 
-
-    print("\n--- Testing Basic Attack & Shield ---")
-    # Let's give Arthur some defense to test the shield string
-    print(hero.add_defense(2)) 
-    
-    # Now attack him
-    print(mage.attack(hero)) 
-    print(mage.attack(hero)) # This one should trigger the shield block string!
-    print(hero.health)
-    print(mage.attack(hero)) 
-    print(hero.health)  # This should show the remaining health after the shield is gone
-
-    
     

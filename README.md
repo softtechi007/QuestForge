@@ -91,3 +91,15 @@ QuestForge is an educational project where each "level" introduces a new OOP con
 - Authored `REFACTOR_NOTES.md` capturing before/after snippets for each SOLID letter, forming the basis of the final architecture write-up
 - Established that most design patterns in Levels 9–14 are simply named recipes for satisfying SOLID; a SOLID-clean base makes pattern insertion trivial rather than invasive
 - Previewed the Observer pattern (Level 14): returning strings from combat methods is the first step toward a decoupled event system where multiple listeners (CLI, Web UI, log file) can subscribe to combat events
+
+### Level 9: Creational Patterns I — Factory & Builder ✅
+- Separated object creation logic from the code that uses it, decoupling the game engine from concrete classes
+- Implemented the **Factory Method Pattern** via `CharacterFactory` in `patterns/creational.py`
+  - Uses a `@staticmethod` to instantiate playable characters (`Warrior`, `Mage`, `Rogue`, `Cleric`) based on string input
+  - Callers depend only on the factory, respecting the Dependency Inversion Principle (DIP)
+  - Adding new character classes now only requires updating the factory, not the UI or game loop
+- Implemented the **Builder Pattern** via `EnemyBuilder` to construct complex enemies (e.g., Bosses)
+  - Replaced the "Telescoping Constructor" anti-pattern with a fluent, step-by-step configuration API (`.with_health()`, `.with_loot()`)
+  - Used method chaining (returning `self`) to make object construction readable and maintainable
+  - Demonstrated when to use instance methods (Builder needs state/memory) vs. static methods (Factory is a pure utility)
+- Updated `play.py` to spawn the player via the Factory and a custom Dragon boss via the Builder
