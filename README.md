@@ -111,3 +111,19 @@ QuestForge is an educational project where each "level" introduces a new OOP con
 - Provided a single global access point for the game engine, UI, and battle loop without passing the manager through every function signature
 - Demonstrated the deliberate, sparing use of Singletons for infrastructure coordinators rather than domain entities, avoiding the pitfalls of hidden global state and test pollution
 - Updated `play.py` to prove that multiple calls to `GameManager()` return the exact same memory address and share state across different scopes
+
+### Level 11: Structural Patterns I — Decorator ✅
+- Solved the **Open/Closed Principle violation** that would occur from adding boolean flags (`is_raging`, `is_poisoned`) to the `Character` class for every new status effect
+- Avoided **class explosion** from inheritance: no need for `RagingWarrior`, `PoisonedWarrior`, `RagingPoisonedWarrior` combinations
+- Implemented the **Decorator Pattern** in `patterns/decorators.py` to add behavior to individual objects at runtime through composition
+- Created `CharacterBuff` base decorator class that wraps a `Character` and delegates all unhandled attributes/methods via Python's `__getattr__` magic method
+- Demonstrated the **"Russian Doll" composition model**: each decorator wraps the previous one, forming a chain where the outermost wrapper is the only one the client sees
+- Implemented `RageBuff` decorator that multiplies `attack_power` by 1.5, overriding the property to add behavior around the wrapped object's value
+- Implemented `PoisonDebuff` decorator with custom `tick()` method that applies damage-over-time, demonstrating decorators can add entirely new methods not present in the base interface
+- Implemented `ShieldBuff` decorator that adds defense charges, proving decorators can wrap state as well as behavior
+- Showed **runtime stacking**: `PoisonDebuff(RageBuff(Warrior("Bram")))` creates a character with both rage and poison effects, with each decorator handling its specific concern
+- Maintained **polymorphism**: the battle engine interacts with decorated characters through the same `Character` interface, unaware of how many wrappers exist
+- Preserved **encapsulation boundaries**: decorators interact with wrapped objects only through public interfaces (`self._wrapped.defense`), never reaching into private state (`self._wrapped._defense`), ensuring the composition chain stays intact when stacking
+- Documented the **"internal self-call" limitation**: decorators cannot intercept the wrapped object's internal `self` method calls (the same limitation as Spring's proxy-based `@Transactional`), so we decorate the method that consumes state rather than the state itself
+- Updated `play.py` to demonstrate wrapping a `Warrior` in multiple decorators and verifying that the original `Warrior` instance remains unmodified (decorators add behavior without mutating the core)
+- Established foundation for Level 17 where buffs and debuffs will be applied and expire dynamically during the main battle loop
