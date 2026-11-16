@@ -103,3 +103,11 @@ QuestForge is an educational project where each "level" introduces a new OOP con
   - Used method chaining (returning `self`) to make object construction readable and maintainable
   - Demonstrated when to use instance methods (Builder needs state/memory) vs. static methods (Factory is a pure utility)
 - Updated `play.py` to spawn the player via the Factory and a custom Dragon boss via the Builder
+
+### Level 10: Creational Patterns II — Singleton ✅
+- Implemented the **Singleton Pattern** via `GameManager` in `patterns/singleton.py` to manage global session state
+- Guaranteed exactly one instance of `GameManager` exists in memory by overriding `__new__` and using an `_initialized` guard in `__init__` to prevent state reset
+- Centralized session-wide coordination: tracks the current player party, turn counter, and difficulty settings
+- Provided a single global access point for the game engine, UI, and battle loop without passing the manager through every function signature
+- Demonstrated the deliberate, sparing use of Singletons for infrastructure coordinators rather than domain entities, avoiding the pitfalls of hidden global state and test pollution
+- Updated `play.py` to prove that multiple calls to `GameManager()` return the exact same memory address and share state across different scopes

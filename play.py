@@ -4,32 +4,44 @@ from domain.battle import run_special_round,total_party_damage
 from domain.items import Armor, HealthPotion, Weapon
 from domain.exceptions import QuestForgeError
 from patterns.creational import CharacterFactory, EnemyBuilder
+from patterns.singleton import GameManager
+
+# Let's create a completely separate function far away from our main code
+def simulate_battle_round():
+    # Inside this function, we just call GameManager(). 
+    # We don't need to pass it as an argument! It finds itself.
+    local_manager = GameManager() 
+    
+    print(f"  -> [Inside Battle] Turn count before: {local_manager.turn_count}")
+    local_manager.next_turn()
+    print(f"  -> [Inside Battle] Turn count after: {local_manager.turn_count}")
 
 if __name__ == "__main__":
+    print("=== 1. FIRST CREATION (Main Menu) ===")
+    # The Construction Crew builds the house. The Designer furnishes it.
+    manager1 = GameManager()
+    manager1.difficulty = "hard"
+    manager1.party = ["Aria (Mage)", "Thorin (Warrior)"]
     
-    # Create two characters
-    # hero = Character(name="Aria", health=100, attack_power=15)
-    # villain = Character(name="Goblin", health=30, attack_power=5)
-    # warrior = Character(name="Thorin", health=120, attack_power=18)
-    # mage = Character(name="Eldrin", health=80, attack_power=10)
-    # rogue = Character(name="Shadow", health=90, attack_power=12)
+    print(f"Manager 1 Memory ID: {id(manager1)}")
+    print(f"Manager 1 Difficulty: {manager1.difficulty}")
+    print(f"Manager 1 Party: {manager1.party}")
     
-
-    # Using Factory
-    player = CharacterFactory.create("mage", "Sylla")
-    player2 = CharacterFactory.create("cleric", "Liora")
-
-
-    # Using Builder
-    boss = (EnemyBuilder("Dragon")
-            .with_health(500)
-            .with_attack(50)
-            .with_loot(HealthPotion())
-            .build())
-
-
-    print(f"Created {player.name} (HP: {player.health})")
-    print(f"Created {player2.name} (HP: {player2.health})")
-    print(f"Created {boss.name} (HP: {boss.health})")
+    print("\n=== 2. SECOND CREATION (Settings Menu) ===")
+    # The Construction Crew sees the house exists and returns the same address.
+    # The Designer sees the "Furnished" sign and walks away.
+    manager2 = GameManager()
+    
+    print(f"Manager 2 Memory ID: {id(manager2)}")
+    print(f"Are they the EXACT same object in memory? {manager1 is manager2}")
+    print(f"Manager 2 Difficulty: {manager2.difficulty}") # Should still be "hard"!
+    
+    print("\n=== 3. THIRD CREATION (Inside a totally different function) ===")
+    simulate_battle_round()
+    
+    print("\n=== 4. VERIFYING STATE BACK IN MAIN ===")
+    # Because the battle function modified the SINGLETON, 
+    # manager1 sees the changes instantly!
+    print(f"Manager 1 Turn Count: {manager1.turn_count}") 
         
     
