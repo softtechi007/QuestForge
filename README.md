@@ -127,3 +127,19 @@ QuestForge is an educational project where each "level" introduces a new OOP con
 - Documented the **"internal self-call" limitation**: decorators cannot intercept the wrapped object's internal `self` method calls (the same limitation as Spring's proxy-based `@Transactional`), so we decorate the method that consumes state rather than the state itself
 - Updated `play.py` to demonstrate wrapping a `Warrior` in multiple decorators and verifying that the original `Warrior` instance remains unmodified (decorators add behavior without mutating the core)
 - Established foundation for Level 17 where buffs and debuffs will be applied and expire dynamically during the main battle loop
+
+### Level 12: Structural Patterns II — Adapter & Facade ✅
+- Solved **interface incompatibility** between game logic and storage backends using the **Adapter Pattern**
+- Solved **complexity exposure** to the UI layer using the **Facade Pattern**
+- Implemented **SaveAdapter** abstract interface in `infra/save_adapter.py` with `save()` and `load()` contract
+- Implemented **JsonFileAdapter** for persistent file-based storage using Python's `json` module and context managers (`with open()`)
+- Implemented **InMemoryAdapter** for RAM-based storage, enabling fast unit tests without disk I/O
+- Demonstrated **Dependency Inversion Principle (DIP)**: game logic depends on the `SaveAdapter` abstraction, not concrete implementations
+- Created **QuestForgeAPI** Facade in `patterns/facade.py` that hides the complexity of `GameManager`, `CharacterFactory`, and `SaveAdapter` behind a simple interface
+- Facade accepts simple data types (strings, lists) from UI and internally orchestrates complex domain object creation via Factory
+- Facade translates complex domain objects back into simple data structures (dictionaries) for serialization via Adapter
+- Demonstrated **Dependency Injection**: same `QuestForgeAPI` works identically with `JsonFileAdapter` or `InMemoryAdapter` injected at runtime
+- Proved **UI decoupling**: `play.py` only talks to `QuestForgeAPI`, never directly to `GameManager`, `CharacterFactory`, or `SaveAdapter`
+- Showed how Facade acts as a **translator and shield**: protects UI from domain complexity, and protects domain from UI changes
+- Established foundation for Level 15 (full save/load implementation) and Level 17 (entire CLI built against `QuestForgeAPI`)
+- Documented **production use cases**: Adapter pattern for wrapping third-party APIs (Stripe/PayPal), Facade pattern for API Gateways in microservices architectures
