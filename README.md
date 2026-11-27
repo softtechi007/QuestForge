@@ -143,3 +143,12 @@ QuestForge is an educational project where each "level" introduces a new OOP con
 - Showed how Facade acts as a **translator and shield**: protects UI from domain complexity, and protects domain from UI changes
 - Established foundation for Level 15 (full save/load implementation) and Level 17 (entire CLI built against `QuestForgeAPI`)
 - Documented **production use cases**: Adapter pattern for wrapping third-party APIs (Stripe/PayPal), Facade pattern for API Gateways in microservices architectures
+
+### Level 13: Behavioral Patterns I — Strategy & State ✅
+- Solved **inflexible, hardcoded AI logic** and **error-prone boolean state management** using the **Strategy** and **State** behavioral patterns
+- Implemented the **Strategy Pattern** in `patterns/strategy.py` to decouple "what an enemy is" from "how it decides to act" (satisfying the Open/Closed Principle)
+  - Created `AIStrategy` Abstract Base Class defining the `choose_target(allies, enemies)` contract
+  - Implemented `AggressiveAI` (targets lowest HP enemy), `RandomAI` (targets randomly), and `DefensiveAI` (heals lowest HP ally if below 30% HP, otherwise attacks lowest HP enemy)
+  - Demonstrated **runtime behavior swapping**: enemies receive their AI strategy via dependency injection, allowing new AI behaviors to be added without modifying the `Enemy` class
+- Implemented the **State Pattern** in `patterns/state.py` to replace scattered, combinatory boolean flags (`is_player_turn`, `is_enemy_turn`) with a strict, explicit state model
+  - Created `BattleState` Enum defining all valid battle phases (IDLE, PLAYER_TURN, ENEMY_TURN, RESOLUTION,
